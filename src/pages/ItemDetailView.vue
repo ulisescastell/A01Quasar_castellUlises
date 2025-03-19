@@ -2,28 +2,28 @@
   <q-page>
     <q-toolbar>
       <q-btn flat icon="arrow_back" @click="router.push('/items')" />
-      <q-toolbar-title>Detalle del Producto</q-toolbar-title>
+      <q-toolbar-title>Product details</q-toolbar-title>
     </q-toolbar>
 
     <q-card class="q-ma-md">
       <q-card-section>
-        <div class="text-h5">{{ item?.name || "Producto no encontrado" }}</div>
-        <div class="text-subtitle1">Precio: ${{ item?.price || 0 }}</div>
+        <div class="text-h5">{{ item?.name || "Product not found" }}</div>
+        <div class="text-subtitle1">Price: ${{ item?.price || 0 }}</div>
       </q-card-section>
 
       <q-card-actions align="right">
-        <q-btn color="red" label="Eliminar Producto" @click="confirmDelete = true" />
+        <q-btn color="red" label="Delete product" @click="confirmDelete = true" />
       </q-card-actions>
     </q-card>
 
     <q-dialog v-model="confirmDelete">
       <q-card>
         <q-card-section>
-          <div class="text-h6">¿Seguro que quieres eliminar este producto?</div>
+          <div class="text-h6">¿You sure you wanna delete this items?</div>
         </q-card-section>
         <q-card-actions align="right">
-          <q-btn flat label="Cancelar" v-close-popup />
-          <q-btn color="red" label="Eliminar" @click="deleteItem" />
+          <q-btn flat label="cancel" v-close-popup />
+          <q-btn color="red" label="delete" @click="deleteItem" />
         </q-card-actions>
       </q-card>
     </q-dialog>
