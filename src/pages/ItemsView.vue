@@ -15,7 +15,8 @@
     </div>
 
     <div class="q-pa-md q-gutter-md">
-      <q-table class="shadow-2" flat bordered :rows="filteredItems" :columns="columns" row-key="id" @row-click="showDetails" />
+      <q-table class="shadow-2" flat bordered :rows="filteredItems" :columns="columns" row-key="id"
+        @row-click="showDetails" />
     </div>
 
     <q-banner v-if="filteredItems.length === 0" class="bg-grey-3 q-pa-md text-center">
@@ -66,15 +67,17 @@ const filteredItems = computed(() => {
 });
 
 const loadItems = async () => {
-  const storedItems = localStorage.getItem('products');
+  const storedItems = JSON.parse(localStorage.getItem('productos'));
 
-  if (storedItems) {
-    items.value = JSON.parse(storedItems);
+  if (storedItems && storedItems.length > 0) {
+    console.log("Loading stored products:", storedItems);
+    items.value = storedItems;
     nextId.value = Math.max(...items.value.map(i => i.id)) + 1;
   } else {
     await fetchAPIItems();
   }
 };
+
 
 const fetchAPIItems = async () => {
   try {
@@ -97,16 +100,26 @@ const saveItems = () => {
 };
 
 const addItem = (newItem) => {
-  items.value.unshift({
+
+  let storedItems = JSON.parse(localStorage.getItem('productos')) || [...items.value];
+
+  const newProduct = {
     id: nextId.value,
     name: newItem.name,
     price: newItem.price
-  });
+  };
 
-  nextId.value++;
-  saveItems();
+  storedItems.unshift(newProduct);
+
+  nextId.value++; 
+
+  localStorage.setItem('productos', JSON.stringify(storedItems));
+  console.log("Saved products (after adding new one):", storedItems);
+  items.value = storedItems;
   showForm.value = false;
 };
+
+
 
 const resetItems = async () => {
   localStorage.removeItem('products');
@@ -120,4 +133,5 @@ const showDetails = (evt, row) => {
 onMounted(() => {
   loadItems();
 });
+
 </script>
