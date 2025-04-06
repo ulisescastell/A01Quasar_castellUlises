@@ -1,5 +1,5 @@
 
-# 📘 Manual Tècnic de l’Aplicació de Catàleg d’Aliments
+#  Manual Tècnic de l’Aplicació de Catàleg d’Aliments
 
 ## 1. Components de Quasar Utilitzats
 
