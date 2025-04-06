@@ -1,14 +1,55 @@
 <template>
-  <div>
-    <q-input v-model="name" label="Product name" />
-    <q-input v-model.number="price" type="number" label="Price" />
-    <q-input v-model="image" label="Image URL (optional)" />
-    <q-input v-model="description" type="textarea" label="Description" />
-    <q-input v-model="category" label="Category" />
+  <div class="q-gutter-md">
+    <q-input
+      v-model="form.name"
+      label="Product name"
+      filled
+      rounded
+      dense
+      input-class="text-subtitle1"
+    />
+
+    <q-input
+      v-model.number="form.price"
+      type="number"
+      label="Price"
+      filled
+      rounded
+      dense
+      input-class="text-subtitle1"
+    />
+
+    <q-input
+      v-model="form.image"
+      label="Image URL (optional)"
+      filled
+      rounded
+      dense
+      input-class="text-subtitle1"
+    />
+
+    <q-input
+      v-model="form.description"
+      type="textarea"
+      label="Description"
+      filled
+      rounded
+      dense
+      input-class="text-subtitle1"
+    />
+
+    <q-input
+      v-model="form.category"
+      label="Category"
+      filled
+      rounded
+      dense
+      input-class="text-subtitle1"
+    />
 
     <div class="row justify-end q-gutter-sm q-mt-md">
-      <q-btn label="Save" color="primary" @click="submit" />
-      <q-btn label="Cancel" flat color="red" @click="$emit('cancel')" />
+      <q-btn label="Cancel" color="negative" flat @click="$emit('cancel')" />
+      <q-btn label="Save" color="primary" @click="save" />
     </div>
   </div>
 </template>
@@ -16,25 +57,18 @@
 <script setup>
 import { ref } from 'vue'
 
-const name = ref('')
-const price = ref(0)
-const image = ref('')
-const description = ref('')
-const category = ref('')
+const form = ref({
+  name: '',
+  price: 0,
+  image: '',
+  description: '',
+  category: ''
+})
 
 const emit = defineEmits(['save', 'cancel'])
 
-const submit = () => {
-  if (!name.value || price.value <= 0) return
-
-  const product = {
-    name: name.value,
-    price: price.value,
-    image: image.value,
-    description: description.value,
-    category: category.value
-  }
-
-  emit('save', product)
+const save = () => {
+  if (!form.value.name.trim()) return
+  emit('save', { ...form.value })
 }
 </script>

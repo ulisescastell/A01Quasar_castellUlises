@@ -1,69 +1,81 @@
 <template>
-  <q-page class="q-pa-md">
+  <q-page class="q-pa-md bg-grey-1">
 
-    <q-toolbar class="bg-grey-2 text-black q-mb-md">
-      <q-btn flat icon="arrow_back" @click="router.push('/items')" />
-      <q-toolbar-title>Product Details</q-toolbar-title>
-    </q-toolbar>
+    <div
+      v-if="item"
+      :style="`background-image: url(${item.image});`"
+      class="blurred-background"
+    ></div>
 
-    <div class="q-pa-lg flex flex-center">
-      <q-card flat bordered class="q-pa-md" style="max-width: 500px; width: 100%;">
+    <div class="q-mx-auto" style="max-width: 800px; position: relative; z-index: 1">
+      <q-card class="q-pa-xl q-mb-xl shadow-3 bg-white rounded-borders">
+
+        <q-toolbar class="bg-grey-2 text-black rounded-borders q-mb-md">
+          <q-btn flat icon="arrow_back" @click="router.push('/items')" />
+          <q-toolbar-title class="text-h5 text-primary">Product Details</q-toolbar-title>
+        </q-toolbar>
+
         <q-card-section v-if="item" class="q-gutter-md">
 
           <div class="flex flex-center">
-            <q-img :src="item.image" style="width: 200px; height: 200px; object-fit: contain; background-color: white;"
-              class="rounded-borders" />
+            <q-img
+              :src="item.image"
+              style="width: 280px; height: 280px; object-fit: contain; background-color: white;"
+              class="rounded-borders shadow-2"
+            />
           </div>
 
-          <div class="text-h5 text-bold text-primary text-center">
+          <div class="text-h4 text-bold text-primary text-center">
             {{ item.name }}
           </div>
 
-          <div class="text-subtitle1 text-dark text-center">
+          <div class="text-h5 text-dark text-center q-mb-sm">
             <q-icon name="attach_money" class="q-mr-xs" />
             {{ item.price.toFixed(2) }}
           </div>
 
-          <div class="text-body1">
-            <strong>Description:</strong>
-            <div class="q-mt-xs">
-              {{ item.description || 'No description available.' }}
-            </div>
+          <q-separator class="q-my-md" />
+
+          <div class="text-body1 q-mb-md" style="font-size: 1.1rem;">
+            <strong>Description:</strong><br />
+            {{ item.description || 'No description available.' }}
           </div>
 
-          <div class="text-caption text-grey-7">
-            Category:
-            <span class="text-weight-medium">{{ item.category || 'N/A' }}</span>
+          <div class="text-caption text-grey-7 text-center">
+            Category: <span class="text-weight-medium">{{ item.category || 'N/A' }}</span>
           </div>
-
         </q-card-section>
 
         <q-card-section v-else class="text-negative text-h6 text-center">
           Product not found
         </q-card-section>
 
-        <q-card-actions align="right" v-if="item">
-          <q-btn label="Delete Product" color="red" @click="confirmDelete = true" />
+        <q-card-actions align="center" v-if="item">
+          <q-btn
+            label="Delete Product"
+            color="red"
+            icon="delete"
+            class="q-mt-md"
+            unelevated
+            size="lg"
+            rounded
+            @click="confirmDelete = true"
+          />
         </q-card-actions>
       </q-card>
     </div>
 
     <q-dialog v-model="confirmDelete">
-      <q-card>
-        <q-card-section>
-          <div class="text-h6">Are you sure you want to delete this product?</div>
+      <q-card class="q-pa-md" style="width: 400px; max-width: 90vw;">
+        <q-card-section class="text-h6 text-center">
+          Are you sure you want to delete this product?
         </q-card-section>
-        <q-card-actions align="right">
+        <q-card-actions align="center">
           <q-btn flat label="Cancel" v-close-popup />
           <q-btn color="red" label="Delete" @click="deleteItem" />
         </q-card-actions>
       </q-card>
     </q-dialog>
-
-    <q-footer class="bg-grey-2 text-center q-pa-sm text-caption text-grey-8">
-      Made with ❤️ using Quasar & FakestoreAPI<br />
-      © 2025 - Uli
-    </q-footer>
   </q-page>
 </template>
 
@@ -86,13 +98,27 @@ const loadProduct = () => {
   }
 }
 
-onMounted(loadProduct)
-watchEffect(loadProduct)
-
 const deleteItem = () => {
   let storedItems = JSON.parse(localStorage.getItem('productos')) || []
   storedItems = storedItems.filter(i => String(i.id) !== String(route.params.id))
   localStorage.setItem('productos', JSON.stringify(storedItems))
   router.push('/items')
 }
+
+onMounted(loadProduct)
+watchEffect(loadProduct)
 </script>
+
+<style scoped>
+.blurred-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  filter: blur(15px) brightness(0.65);
+  z-index: 0;
+}
+</style>
